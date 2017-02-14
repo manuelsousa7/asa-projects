@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2015/Arch Linux)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: rel.aux
+The style file: plain.bst
+Database file #1: ref.bib
+Warning--to sort, need author or key in ISOC++:2003
+Warning--empty author in ISOC++:2003
+You've used 2 entries,
+            2118 wiz_defined-function locations,
+            514 strings with 4219 characters,
+and the built_in function-call counts, 604 in all, are:
+= -- 61
+> -- 14
+< -- 1
++ -- 6
+- -- 4
+* -- 44
+:= -- 92
+add.period$ -- 5
+call.type$ -- 2
+change.case$ -- 8
+chr.to.int$ -- 0
+cite$ -- 4
+duplicate$ -- 29
+empty$ -- 52
+format.name$ -- 4
+if$ -- 131
+int.to.chr$ -- 0
+int.to.str$ -- 2
+missing$ -- 2
+newline$ -- 12
+num.names$ -- 2
+pop$ -- 8
+preamble$ -- 1
+purify$ -- 6
+quote$ -- 0
+skip$ -- 23
+stack$ -- 0
+substring$ -- 41
+swap$ -- 9
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 8
+warning$ -- 2
+while$ -- 5
+width$ -- 3
+write$ -- 22
+(There were 2 warnings)
