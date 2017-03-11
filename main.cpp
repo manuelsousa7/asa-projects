@@ -4,7 +4,8 @@
 
 using namespace std;
 
-bool AnalyzePhotos();
+//Recebe o tamanho da lista (numero de fotos) e o input dado
+bool AnalyzePhotos(int list_size, vector<vector<int>> input);
 
 int main() {
 
@@ -31,8 +32,9 @@ int main() {
 		}
 		else {
 
-			vector<vector<int>> listaAdj;
-			listaAdj.resize(userInput[0]);
+			//Guarda o input do utilizador sobre a relacao entre as imagens
+			vector<vector<int>> gatheredInput;
+			gatheredInput.resize(userInput[1]);
 
 			int i;
 			//Cria uma lista para cada foto
@@ -40,14 +42,22 @@ int main() {
 				listaAdj[i].push_back(i+1);
 			}
 
+			cout << "Indique as relacoes entre as fotos: " << endl;
+
 			//Recebe os proximos n inputs
 			for (i = 0; i < userInput[1]; i++) {
-				userInput.clear();
+
+				vector<int> tempVectorInput;
 				cin >> tempInput;
-				userInput.push_back(tempInput);
+				tempVectorInput.push_back(tempInput);
 				cin >> tempInput;
-				userInput.push_back(tempInput);
+				tempVectorInput.push_back(tempInput);
+
+				gatheredInput.push_back(tempVectorInput);
 			}
+
+			AnalyzePhotos(userInput[0], gatheredInput);
+
 			inputReady = true;
 		}
 	}
@@ -56,6 +66,10 @@ int main() {
 	return 0;
 }
 
-bool AnalyzePhotos() {
+bool AnalyzePhotos(int list_size, vector<vector<int>> input) {
+
+	vector<vector<int>> listaAdj;
+	listaAdj.resize(list_size);
+
 
 }
