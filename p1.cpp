@@ -8,8 +8,9 @@ using namespace std;
 
 vector<vector<int> > G;
 vector<int> ts;
+vector<bool> visited;
+vector<bool> cycleStack;
 
-bool *visited, *cycleStack;
 bool hasCycle = false, uniqueTopSort = true;
 int zeroEdges  = 0;
 
@@ -34,11 +35,8 @@ int main() {
 	scanf("%d %d", &N, &L);
 
 	G = vector<vector<int> >(N + 1, vector<int>());
-	visited = new bool[N];
-	cycleStack = new bool[N];
-
-	memset(visited, false, N * sizeof(bool));
-	memset(cycleStack, false, N * sizeof(bool));
+	visited = vector<bool>(N + 1, false);
+	cycleStack = vector<bool>(N + 1, false);
 
 	for (int i = 0; i < L; i++) {
 		int x, y;
