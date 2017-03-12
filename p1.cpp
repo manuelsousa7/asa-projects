@@ -10,12 +10,12 @@ typedef vector <int>::reverse_iterator vri;
 typedef vector <int>::iterator vi;
 
 vector<vector<int> > G; //grafo
-vector<int> ts; //ordem topologica
+vector<int> ts;//ordem topologica
 vector<bool> visited;//vertices visitados
 vector<bool> cycleStack;//ciclos no grafo
 
-bool hasCycle = false;// Tem ciclos?
-bool uniqueTopSort = true;// Tem tem uma ordenacao topologica unica?
+bool hasCycle = false;//Tem ciclos?
+bool uniqueTopSort = true;//Tem uma ordenacao topologica unica?
 
 int N, L;
 
@@ -69,8 +69,8 @@ int main() {
 				break;
 			}
 		}
-		/* Se existir uma ordenacao topologica unica imprime os resultados
-		caso contrario nao ha informacao suficiente para imprimir ordem unica */
+		/* Se existir uma ordenacao topologica unica imprime os resultados,
+		caso contrario nao e possivel imprimir uma ordem unica */
 		if (uniqueTopSort) {
 			for (vri v = ts.rbegin(); v != ts.rend(); v++)
 				cout << *v + 1 << (v + 1 == ts.rend() ? "\n" : " ");
