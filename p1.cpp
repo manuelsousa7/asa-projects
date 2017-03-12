@@ -9,16 +9,20 @@ using namespace std;
 typedef vector <int>::reverse_iterator vri;
 typedef vector <int>::iterator vi;
 
-vector<vector<int> > G;
-vector<int> ts;
-vector<bool> visited;
-vector<bool> cycleStack;
+vector<vector<int> > G; //grafo
+vector<int> ts; //ordem topologica
+vector<bool> visited;//vertices visitados
+vector<bool> cycleStack;//ciclos no grafo
 
-bool hasCycle = false, uniqueTopSort = true;
-int zeroEdges  = 0;
+bool hasCycle = false;// Tem ciclos?
+bool uniqueTopSort = true;// Tem tem uma ordenacao topologica unica?
 
 int N, L;
 
+/* dfs: Visita todos os vertices de um grafo, e deteta existencia de ciclos
+ * Devolve: nada
+ * Ordenacao topologica baseada em pesquisa em profundidade (DFS)
+ */
 void dfs(int u) {
 	visited[u] = true;
 	cycleStack[u] = true;
@@ -30,16 +34,12 @@ void dfs(int u) {
 			return;
 		}
 	}
-
-	if (!ts.empty() && find(G[u].begin(), G[u].end(), ts.back()) == G[u].end()) {
-		uniqueTopSort = false;
-	}
-
 	cycleStack[u] = false;
 	ts.push_back(u);
 }
 
 int main() {
+	/* Processa dados de entrada */
 	scanf("%d %d", &N, &L);
 
 	G = vector<vector<int> >(N + 1, vector<int>());
@@ -52,13 +52,25 @@ int main() {
 		G[x - 1].push_back(y - 1);
 	}
 
+	/* Chama DFS em todos os vertices nao visitados */
 	for (int u = 0; u < N; u++)
 		if (!visited[u])
 			dfs(u);
 
+	/* Se tiver ciclos no grafo entao e Incoerente */
 	if (hasCycle) {
 		printf("Incoerente\n");
 	} else {
+		/* Verifica se dois vertices consecutivos na ordenacao topologica
+		estao ligados entre si. Se nao estiverem entao nao existe uma ordem unica */
+		for (vector <int>::reverse_iterator v = ts.rbegin(); v + 1 != ts.rend(); v++) {
+			if (find(G[*v].begin(), G[*v].end(), *(v + 1)) == G[*v].end()) {
+				uniqueTopSort = false;
+				break;
+			}
+		}
+		/* Se existir uma ordenacao topologica unica imprime os resultados
+		caso contrario nao ha informacao suficiente para imprimir ordem unica */
 		if (uniqueTopSort) {
 			for (vri v = ts.rbegin(); v != ts.rend(); v++)
 				cout << *v + 1 << (v + 1 == ts.rend() ? "\n" : " ");
