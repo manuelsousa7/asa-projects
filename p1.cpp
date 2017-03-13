@@ -63,7 +63,7 @@ int main() {
 	} else {
 		/* Verifica se dois vertices consecutivos na ordenacao topologica
 		estao ligados entre si. Se nao estiverem entao nao formam um caminho Hamiltoniano.
-		Se formarem um caminho Hamiltoniano entao e garantido que tem apenas uma ordenacao topologica unica */
+		Se formarem um caminho Hamiltoniano entao e garantido que tem apenas uma unica ordenacao topologica */
 		for (vri v = ts.rbegin(); v + 1 != ts.rend(); v++) {
 			if (find(G[*v].begin(), G[*v].end(), *(v + 1)) == G[*v].end()) {
 				uniqueTopSort = false;
