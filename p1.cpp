@@ -12,7 +12,7 @@ typedef vector <int>::iterator vi;
 vector<vector<int> > G;//grafo
 vector<int> ts;//ordem topologica
 vector<bool> visited;//vertices visitados
-vector<bool> cycleStack;//ciclos no grafo
+vector<bool> grey;//ciclos no grafo
 
 bool hasCycle = false;//Tem ciclos?
 bool uniqueTopSort = true;//Tem uma ordenacao topologica unica?
@@ -25,16 +25,16 @@ int N, L;
  */
 void dfs(int u) {
 	visited[u] = true;
-	cycleStack[u] = true;
+	grey[u] = true;
 	for (vi v = G[u].begin(); v != G[u].end(); v++) {
 		if (!visited[*v]) {
 			dfs(*v);
-		} else if (cycleStack[*v]) {
+		} else if (grey[*v]) {
 			hasCycle = true;
 			return;
 		}
 	}
-	cycleStack[u] = false;
+	grey[u] = false;
 	ts.push_back(u);
 }
 
@@ -44,7 +44,7 @@ int main() {
 
 	G = vector<vector<int> >(N + 1, vector<int>());
 	visited = vector<bool>(N + 1, false);
-	cycleStack = vector<bool>(N + 1, false);
+	grey = vector<bool>(N + 1, false);
 
 	for (int i = 0; i < L; i++) {
 		int x, y;
