@@ -54,7 +54,7 @@ int main() {
 
 	/* Chama DFS em todos os vertices nao visitados */
 	for (int u = 0; u < N; u++)
-		if (!visited[u])
+		if (!visited[u] && !hasCycle)
 			dfs(u);
 
 	/* Se tiver ciclos no grafo entao e Incoerente */
