@@ -11,8 +11,8 @@ typedef vector <int>::iterator vi;
 
 vector<vector<int> > G;//grafo
 vector<int> ts;//ordem topologica
-vector<bool> visited;//vertices visitados
-vector<bool> closed;//ciclos no grafo
+vector<bool> visited;//vertices visitados (grey)
+vector<bool> closed;//vertice fechados (black)
 
 bool hasCycle = false;//Tem ciclos?
 bool uniqueTopSort = true;//Tem uma ordenacao topologica unica?
