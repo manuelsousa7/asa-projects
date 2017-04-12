@@ -1,4 +1,4 @@
-# Projeto 1 ASA
+# Projetos de ASA
 
-#  Goncalo Marques 84719
-   Manuel Sousa 84740
+*  Goncalo Marques 84719
+*   Manuel Sousa 84740

@@ -1,9 +1,5 @@
-#include <iostream>
-#include <algorithm>
-#include <cstdio>
-#include <cstring>
-#include <vector>
-//#include <bits/stdc++.h>
+#include <bits/stdc++.h>
+
 using namespace std;
 
 vector<vector<int> > G;
