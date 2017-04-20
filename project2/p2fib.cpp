@@ -11,13 +11,14 @@ using namespace std;
 
 template <class T> class FibHeap;
 typedef pair<int, int> pii;
+typedef vector<pii> vpii;
+typedef vector<int> vi;
 
 int N, SKY = -1;
-vector<vector<pii > > G;
-
-vector<int> parent;
-vector<int> d;
+vector<vpii > G;
+vi taken;
 vector<bool> visited;
+vector<int> parent;
 
 template <class T>
 struct Node {
@@ -241,7 +242,8 @@ public:
   }
 };
 
-FibHeap<pii > heap;
+FibHeap<pii > pq;
+
 
 void dfs(int v) {
   visited[v] = true;
@@ -251,7 +253,7 @@ void dfs(int v) {
 }
 
 bool connected(int N) {
-  visited = vector<bool>(N + 2, false);
+  visited = vector<bool>(N, false);
   dfs(0);
   for (int u = 0; u < N; u++)
     if (!visited[u])
@@ -259,35 +261,36 @@ bool connected(int N) {
   return true;
 }
 
-void add(int cost, int v, int p) {
-  if (cost < d[v] || (cost == d[v] && parent[v] == SKY)) {
-    parent[v] = p;
-    heap.erase(pair<int, int>(d[v], v));
-    d[v] = cost;
-    heap.insert(pair<int, int>(d[v], v));
+
+void process(int vtx) {
+  taken[vtx] = 1;
+  for (int j = 0; j < (int)G[vtx].size(); j++) {
+    pii v = G[vtx][j];
+    if (!taken[v.second]) {
+      pq.insert(pii(-v.first, -v.second));
+      parent[v.second] = vtx;
+    }
   }
 }
 
-pair<int, pii > prim() {
-  int na = 0, ne = 0, totalweight = 0;
-  d = vector<int>(N + 1, INF);
-  parent = vector<int>(N + 1, -1);
-  vector<Node<pii>*> pos = vector<Node<pii>*>(G.size(), NULL);
-  add(0, 0, -1);
-  while (!heap.empty()) {
-    pii cur = heap.top();
-    totalweight += d[cur.s];
-    d[cur.s] = 0;
-    if (cur.s == SKY || parent[cur.s] == SKY)
-      na++;
-    else if (parent[cur.s] != -1)
-      ne++;
-
-    heap.pop();
-    for (unsigned int i = 0; i < G[cur.s].size(); i++)
-      add(G[cur.s][i].f, G[cur.s][i].s, cur.s);
+pair<int, pii > prim(int N) {
+  taken.assign(N, 0);
+  parent = vector<int>(N, -1);
+  process(0);
+  int mst_cost = 0, w, u, na = 0, ne = 0;
+  while (!pq.empty()) {
+    pii front = pq.top();
+    pq.pop();
+    u = -front.second, w = -front.first;
+    if (!taken[u]) {
+      if (parent[u] == SKY || u == SKY)
+        na += 1 ;
+      else
+        ne += 1;
+      mst_cost += w, process(u);
+    }
   }
-  return mp(totalweight, mp(na, ne));
+  return mp(mst_cost, mp(na, ne));
 }
 
 int main() {
@@ -297,7 +300,7 @@ int main() {
   scanf("%d", &A);
 
   SKY = N;
-  G = vector<vector<pii > >(N + 1, vector<pii > ());
+  G = vector<vector<pii > >(N + 1, vector<pii >());
 
   for (int i = 0; i < A; i++) {
     int a, c;
@@ -320,7 +323,7 @@ int main() {
     return 0;
   }
 
-  pair<int, pii > yesA = prim();
+  pair<int, pii > yesA = prim(N + 1);
 
   //clear airports
   for (unsigned int i = 0; i < G[SKY].size(); i++)
@@ -333,7 +336,7 @@ int main() {
     return 0;
   }
 
-  pair<int, pii > noA = prim();
+  pair<int, pii > noA = prim(N);
 
   if (yesA.f > noA.f)
     printf("%d\n%d %d\n", noA.f, noA.s.f, noA.s.s);
