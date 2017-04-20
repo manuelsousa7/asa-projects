@@ -115,5 +115,6 @@ int main() {
   else
     printf("%d\n%d %d\n", noA.f, noA.s.f, noA.s.s);
 
+
   return 0;
 }
