@@ -87,8 +87,8 @@ private:
 
   void consolidate() {
     Node<T>* Ranks[FH_MAX_RANK] = {NULL};
-    for (int i = 0; i < FH_MAX_RANK; i++) 
-      Ranks[i] = NULL; 
+    for (int i = 0; i < FH_MAX_RANK; i++)
+      Ranks[i] = NULL;
     Node<T> *h = Hmin, *prox, *aux = NULL;
     do {
       prox = h->r;
@@ -100,7 +100,7 @@ private:
           h = aux;
         } else {
           h->add_child(aux);
-          Ranks[h->rank - 1] = NULL; 
+          Ranks[h->rank - 1] = NULL;
         }
       }
       Ranks[h->rank] = h;
@@ -244,7 +244,6 @@ public:
 
 FibHeap<pii > pq;
 
-
 void dfs(int v) {
   visited[v] = true;
   for (vector<pair<int, int> >::iterator it = G[v].begin(); it != G[v].end(); it++)
@@ -267,7 +266,7 @@ void process(int vtx) {
   for (int j = 0; j < (int)G[vtx].size(); j++) {
     pii v = G[vtx][j];
     if (!taken[v.second]) {
-      pq.insert(pii(-v.first, -v.second));
+      pq.insert(pii(v.first, v.second));
       parent[v.second] = vtx;
     }
   }
@@ -281,7 +280,7 @@ pair<int, pii > prim(int N) {
   while (!pq.empty()) {
     pii front = pq.top();
     pq.pop();
-    u = -front.second, w = -front.first;
+    u = front.second, w = front.first;
     if (!taken[u]) {
       if (parent[u] == SKY || u == SKY)
         na += 1 ;
