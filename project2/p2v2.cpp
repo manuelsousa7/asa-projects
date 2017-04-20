@@ -27,7 +27,7 @@ void dfs(int v) {
 }
 
 bool connected(int N) {
-  visited = vector<bool>(N + 2, false);
+  visited = vector<bool>(N, false);
   dfs(0);
   for (int u = 0; u < N; u++)
     if (!visited[u])
@@ -74,7 +74,7 @@ int main() {
   scanf("%d", &A);
 
   SKY = N;
-  G = vector<vector<pii > >(N + 1, vector<pii > ());
+  G = vector<vector<pii > >(N + 1, vector<pii >());
 
   for (int i = 0; i < A; i++) {
     int a, c;
