@@ -216,21 +216,6 @@ public:
     return ret;
   }
 
-  Node<T>* decrease_key(Node<T> *x, const T& key) {
-    if (key < x->key)  {
-      Node<T> * y = x->p;
-      x->key = key;
-      if (y != NULL && x->key < y->key) {
-        cut(x, y);
-        cascadingCut(y);
-      }
-      if (x->key < Hmin->key) {
-        Hmin = x;
-      }
-    }
-    return x;
-  }
-
   bool empty() {
     return N == 0;
   }
@@ -263,33 +248,34 @@ bool connected(int N) {
 
 void process(int vtx) {
   taken[vtx] = 1;
-  for (int j = 0; j < (int)G[vtx].size(); j++) {
+  for (unsigned int j = 0; j < G[vtx].size(); j++) {
     pii v = G[vtx][j];
-    if (!taken[v.second]) {
-      pq.insert(pii(v.first, v.second));
-      parent[v.second] = vtx;
+    if (!taken[v.s]) {
+      pq.insert(pii(v.f, v.s));
+      parent[v.s] = vtx;
     }
   }
 }
 
 pair<int, pii > prim(int N) {
   taken.assign(N, 0);
+  pii nAnE(0, 0);
   parent = vector<int>(N, -1);
   process(0);
-  int mst_cost = 0, w, u, na = 0, ne = 0;
+  int cost = 0, w, u, na = 0, ne = 0;
   while (!pq.empty()) {
     pii front = pq.top();
     pq.pop();
-    u = front.second, w = front.first;
+    u = front.s, w = front.f;
     if (!taken[u]) {
       if (parent[u] == SKY || u == SKY)
-        na += 1 ;
+        nAnE.f += 1;
       else
-        ne += 1;
-      mst_cost += w, process(u);
+        nAnE.s += 1;
+      cost += w, process(u);
     }
   }
-  return mp(mst_cost, mp(na, ne));
+  return mp(cost, nAnE);
 }
 
 int main() {
@@ -317,20 +303,19 @@ int main() {
     G[b - 1].pb(pii(c, a - 1));
   }
 
-  if (!connected(N + 1) && A > 0) {
-    cout << "Insuficiente" << endl;
+  if (A > 0 && !connected(N + 1)) {
+    printf("Insuficiente\n");
     return 0;
   }
 
   pair<int, pii > yesA = prim(N + 1);
 
-  //clear airports
   for (unsigned int i = 0; i < G[SKY].size(); i++)
     G[G[SKY][i].s].erase(G[G[SKY][i].s].begin());
 
   G[SKY].clear();
 
-  if (!connected(N)) {
+  if (E > 0 && !connected(N)) {
     printf("%d\n%d %d\n", yesA.f, yesA.s.f, yesA.s.s);
     return 0;
   }
