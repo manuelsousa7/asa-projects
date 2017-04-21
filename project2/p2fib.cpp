@@ -326,12 +326,12 @@ int main() {
     noA = prim(N);
   }
 
-  if (yesA.f > noA.f)
+  if (A == 0 && E == 0)
+    printf("0\n0 0\n");
+  else if (yesA.f > noA.f)
     printf("%d\n%d %d\n", noA.f, noA.s.f, noA.s.s);
   else if (yesA.f < noA.f)
     printf("%d\n%d %d\n", yesA.f, yesA.s.f, yesA.s.s);
-  else if(A == 0 && E ==0)
-    printf("0\n0 0\n");
   else
     printf("%d\n%d %d\n", noA.f, noA.s.f, noA.s.s);
 
