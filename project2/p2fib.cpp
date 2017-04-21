@@ -13,14 +13,16 @@ template <class T> class FibHeap;
 typedef pair<int, int> pii;
 typedef vector<pii> vpii;
 typedef vector<int> vi;
+typedef vector<bool> vb;
 
 int N, SKY = -1;
-vector<vpii > G;
+vector<vpii> G;
 vi taken;
-vector<bool> visited;
-vector<int> parent;
+vb visited;
+vi parent;
 
 template <class T>
+
 struct Node {
   T key;
   Node *l, *r, *p, *c;
@@ -138,17 +140,7 @@ private:
     x->mark = false;
   }
 
-  void cascadingCut(Node<T> *x) {
-    Node<T> *y = x->p;
-    if (y != NULL) {
-      if (x->mark) {
-        cut(x, y);
-        cascadingCut(y);
-      } else {
-        x->mark = true;
-      }
-    }
-  }
+
   void _delete_recursive(Node<T>* r) {
     if (r == NULL) return;
     Node<T> * aux = r;
@@ -219,11 +211,9 @@ public:
   bool empty() {
     return N == 0;
   }
+
   int size() {
     return N;
-  }
-  Node<T>* getTop() {
-    return Hmin;
   }
 };
 
@@ -262,7 +252,7 @@ pair<int, pii > prim(int N) {
   pii nAnE(0, 0);
   parent = vector<int>(N, -1);
   process(0);
-  int cost = 0, w, u, na = 0, ne = 0;
+  int cost = 0, w, u;
   while (!pq.empty()) {
     pii front = pq.top();
     pq.pop();
