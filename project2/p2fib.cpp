@@ -251,7 +251,7 @@ void process(int vtx) {
   for (unsigned int j = 0; j < G[vtx].size(); j++) {
     pii v = G[vtx][j];
     if (!taken[v.s]) {
-      pq.insert(pii(v.f, v.s));
+      pq.insert(pii(v.f, v.s)); //O(1+)
       parent[v.s] = vtx;
     }
   }
@@ -280,7 +280,8 @@ pair<int, pii > prim(int N) {
 
 int main() {
   int A, E;
-
+  pair<int, pii > yesA(INF, mp(0, 0));
+  pair<int, pii > noA(INF, mp(0, 0));
   scanf("%d", &N);
   scanf("%d", &A);
 
@@ -302,30 +303,35 @@ int main() {
     G[a - 1].pb(pii(c, b - 1));
     G[b - 1].pb(pii(c, a - 1));
   }
+  if (A > 0) {
+    if (!connected(N + 1)) {
+      printf("Insuficiente\n");
+      return 0;
+    }
 
-  if (A > 0 && !connected(N + 1)) {
-    printf("Insuficiente\n");
-    return 0;
+    yesA = prim(N + 1);
+
+    for (unsigned int i = 0; i < G[SKY].size(); i++)
+      G[G[SKY][i].s].erase(G[G[SKY][i].s].begin());
+
+    G[SKY].clear();
   }
 
-  pair<int, pii > yesA = prim(N + 1);
+  if (E > 0) {
+    if (!connected(N)) {
+      printf("%d\n%d %d\n", yesA.f, yesA.s.f, yesA.s.s);
+      return 0;
+    }
 
-  for (unsigned int i = 0; i < G[SKY].size(); i++)
-    G[G[SKY][i].s].erase(G[G[SKY][i].s].begin());
-
-  G[SKY].clear();
-
-  if (E > 0 && !connected(N)) {
-    printf("%d\n%d %d\n", yesA.f, yesA.s.f, yesA.s.s);
-    return 0;
+    noA = prim(N);
   }
-
-  pair<int, pii > noA = prim(N);
 
   if (yesA.f > noA.f)
     printf("%d\n%d %d\n", noA.f, noA.s.f, noA.s.s);
   else if (yesA.f < noA.f)
     printf("%d\n%d %d\n", yesA.f, yesA.s.f, yesA.s.s);
+  else if(A == 0 && E ==0)
+    printf("0\n0 0\n");
   else
     printf("%d\n%d %d\n", noA.f, noA.s.f, noA.s.s);
 
