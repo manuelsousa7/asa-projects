@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
+#include <stdint.h>
 
 using namespace std;
 
-#define FH_MAX_RANK 16
 #define s second
 #define f first
 #define mp make_pair
@@ -14,13 +14,11 @@ typedef pair<int, int> pii;
 typedef vector<pii> vpii;
 typedef vector<int> vi;
 typedef vector<bool> vb;
-
+unsigned int FH_MAX_RANK;
 int N, SKY = -1;
 vector<vpii> G;
 vi taken;
 vb visited;
-vi parent;
-
 template <class T>
 
 struct Node {
@@ -89,7 +87,7 @@ private:
 
   void consolidate() {
     Node<T>* Ranks[FH_MAX_RANK] = {NULL};
-    for (int i = 0; i < FH_MAX_RANK; i++)
+    for (unsigned int i = 0; i < FH_MAX_RANK; i++)
       Ranks[i] = NULL;
     Node<T> *h = Hmin, *prox, *aux = NULL;
     do {
@@ -217,7 +215,7 @@ public:
   }
 };
 
-FibHeap<pii > pq;
+FibHeap<pair<int, pii> > pq;
 
 void dfs(int v) {
   visited[v] = true;
@@ -226,8 +224,10 @@ void dfs(int v) {
       dfs(it->s);
 }
 
-bool connected(int N) {
+bool connected(int N, int E) {
   visited = vector<bool>(N, false);
+  if (E < N - 1)
+    return false;
   dfs(0);
   for (int u = 0; u < N; u++)
     if (!visited[u])
@@ -238,11 +238,10 @@ bool connected(int N) {
 
 void process(int vtx) {
   taken[vtx] = 1;
-  for (unsigned int j = 0; j < G[vtx].size(); j++) {
+  for (int j = 0; j < (int)G[vtx].size(); j++) {
     pii v = G[vtx][j];
-    if (!taken[v.s]) {
-      pq.insert(pii(v.f, v.s)); //O(1+)
-      parent[v.s] = vtx;
+    if (!taken[v.second]) {
+      pq.insert(mp(v.first, pii(max(v.second, vtx), v.second)));
     }
   }
 }
@@ -250,15 +249,15 @@ void process(int vtx) {
 pair<int, pii > prim(int N) {
   taken.assign(N, 0);
   pii nAnE(0, 0);
-  parent = vector<int>(N, -1);
   process(0);
-  int cost = 0, w, u;
+  int w, p, u;
+  int cost = 0;
   while (!pq.empty()) {
-    pii front = pq.top();
+    pair<int, pii> front = pq.top();
     pq.pop();
-    u = front.s, w = front.f;
+    u = front.s.s, w = front.f, p = front.s.f;
     if (!taken[u]) {
-      if (parent[u] == SKY || u == SKY)
+      if (p == SKY)
         nAnE.f += 1;
       else
         nAnE.s += 1;
@@ -268,13 +267,29 @@ pair<int, pii > prim(int N) {
   return mp(cost, nAnE);
 }
 
+inline int pow2roundup(int v) {
+  int r;
+  static const int MultiplyDeBruijnBitPosition[32] = {
+    0, 9, 1, 10, 13, 21, 2, 29, 11, 14, 16, 18, 22, 25, 3, 30,
+    8, 12, 20, 28, 15, 17, 24, 7, 19, 27, 23, 6, 26, 5, 4, 31
+  };
+  v |= v >> 1;
+  v |= v >> 2;
+  v |= v >> 4;
+  v |= v >> 8;
+  v |= v >> 16;
+  r = MultiplyDeBruijnBitPosition[(uint32_t)(v * 0x07C4ACDDU) >> 27];
+  return r;
+}
+
 int main() {
   int A, E;
-  pair<int, pii > yesA(INF, mp(0, 0));
-  pair<int, pii > noA(INF, mp(0, 0));
+  bool flagA = false;
+  pair<int, pii > yesA(INF, mp(INF, INF));
+  pair<int, pii > noA(INF, mp(INF, INF));
   scanf("%d", &N);
   scanf("%d", &A);
-
+  FH_MAX_RANK = pow2roundup(N + 1);
   SKY = N;
   G = vector<vector<pii > >(N + 1, vector<pii >());
 
@@ -294,12 +309,14 @@ int main() {
     G[b - 1].pb(pii(c, a - 1));
   }
   if (A > 0) {
-    if (!connected(N + 1)) {
+    if (!connected(N + 1, A + E)) {
       printf("Insuficiente\n");
       return 0;
     }
 
     yesA = prim(N + 1);
+    flagA = true;
+
 
     for (unsigned int i = 0; i < G[SKY].size(); i++)
       G[G[SKY][i].s].erase(G[G[SKY][i].s].begin());
@@ -308,22 +325,21 @@ int main() {
   }
 
   if (E > 0) {
-    if (!connected(N)) {
-      printf("%d\n%d %d\n", yesA.f, yesA.s.f, yesA.s.s);
-      return 0;
+    if (!connected(N, E)) {
+      if (flagA) {
+        printf("%d\n%d %d\n", yesA.f, yesA.s.f, yesA.s.s);
+        return 0;
+      }
     }
-
     noA = prim(N);
+
   }
 
   if (A == 0 && E == 0)
-    printf("0\n0 0\n");
-  else if (yesA.f > noA.f)
+    printf("Insuficiente\n");
+  else if (yesA.f >= noA.f)
     printf("%d\n%d %d\n", noA.f, noA.s.f, noA.s.s);
   else if (yesA.f < noA.f)
     printf("%d\n%d %d\n", yesA.f, yesA.s.f, yesA.s.s);
-  else
-    printf("%d\n%d %d\n", noA.f, noA.s.f, noA.s.s);
-
   return 0;
 }
