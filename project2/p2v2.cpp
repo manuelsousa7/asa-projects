@@ -41,7 +41,7 @@ void process(int vtx) {
   for (int j = 0; j < (int)G[vtx].size(); j++) {
     pii v = G[vtx][j];
     if (!taken[v.s]) {
-      pq.push(mp(-v.first, pii(min(-v.s,-vtx), -v.s)));
+      pq.push(mp(-v.first, pii(min(-v.s, -vtx), -v.s)));
     }
   }
 }
@@ -101,7 +101,6 @@ int main() {
     yesA = prim(N + 1);
     flagA = true;
 
-
     for (unsigned int i = 0; i < G[SKY].size(); i++)
       G[G[SKY][i].s].erase(G[G[SKY][i].s].begin());
 
@@ -114,17 +113,11 @@ int main() {
         printf("%d\n%d %d\n", yesA.f, yesA.s.f, yesA.s.s);
         return 0;
       }
-    } else {
-      noA = prim(N);
-
-      if (!flagA) {
-        printf("%d\n%d %d\n", noA.f, noA.s.f, noA.s.s);
-        return 0;
-      }
     }
+    noA = prim(N);
   }
 
-  if ( (A == 0 && E == 0) || (yesA.f == INF && noA.f == INF))
+  if (A == 0 && E == 0)
     printf("Insuficiente\n");
   else if (yesA.f >= noA.f)
     printf("%d\n%d %d\n", noA.f, noA.s.f, noA.s.s);
