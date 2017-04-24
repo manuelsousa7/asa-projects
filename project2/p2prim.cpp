@@ -101,6 +101,7 @@ int main() {
     yesA = prim(N + 1);
     flagA = true;
 
+
     for (unsigned int i = 0; i < G[SKY].size(); i++)
       G[G[SKY][i].s].erase(G[G[SKY][i].s].begin());
 
@@ -113,8 +114,9 @@ int main() {
         printf("%d\n%d %d\n", yesA.f, yesA.s.f, yesA.s.s);
         return 0;
       }
+    } else {
+      noA = prim(N);
     }
-    noA = prim(N);
   }
 
   if (A == 0 && E == 0)
