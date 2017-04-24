@@ -62,8 +62,7 @@ public:
 };
 
 
-bool compara(const pair<int, pii >& a, const pair<int, pii >& b)
-{
+bool compara(const pair<int, pii >& a, const pair<int, pii >& b){
     if (a.first == b.first) {
       return max(b.s.f, b.s.s) > max(a.s.f, a.s.s);
     }
