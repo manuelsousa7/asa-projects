@@ -62,15 +62,15 @@ public:
 };
 
 
-bool compara(const pair<int, pii >& a, const pair<int, pii >& b){
-    if (a.first == b.first) {
-      return max(b.s.f, b.s.s) > max(a.s.f, a.s.s);
-    }
-    return a.first < b.first;
+bool compara(const pair<int, pii >& a, const pair<int, pii >& b) {
+  if (a.first == b.first) {
+    return max(b.s.f, b.s.s) > max(a.s.f, a.s.s);
+  }
+  return a.first < b.first;
 }
 
 pair<int, pii > kruskal(int N, int E, vector< pair<int, pii> > &EdgeList) {
-  sort(EdgeList.begin(), EdgeList.end(),compara);
+  sort(EdgeList.begin(), EdgeList.end(), compara);
   pii nAnE(0, 0);
   int mst_cost = 0;
   UnionFind UF(N);
@@ -99,14 +99,12 @@ int main() {
   scanf("%d", &A);
 
   SKY = N;
-  G = vector<vector<pii > >(N + 1, vector<pii >());
+
 
   for (int i = 0; i < A; i++) {
     int a, c;
     scanf("%d %d", &a, &c);
     EdgeList.push_back(make_pair(c, mp(a - 1, SKY)));
-    G[SKY].pb(pii(c, a - 1));
-    G[a - 1].pb(pii(c, SKY));
   }
 
   scanf("%d", &E);
@@ -116,8 +114,6 @@ int main() {
     scanf("%d %d %d", &a, &b, &c);
     EdgeList.push_back(make_pair(c, mp(a - 1, b - 1)));
     EdgeList2.push_back(make_pair(c, mp(a - 1, b - 1)));
-    G[a - 1].pb(pii(c, b - 1));
-    G[b - 1].pb(pii(c, a - 1));
   }
   if (A > 0) {
     if (!connected(N + 1, A + E)) {
@@ -129,10 +125,6 @@ int main() {
     flagA = true;
 
 
-    for (unsigned int i = 0; i < G[SKY].size(); i++)
-      G[G[SKY][i].s].erase(G[G[SKY][i].s].begin());
-
-    G[SKY].clear();
   }
 
   if (E > 0) {

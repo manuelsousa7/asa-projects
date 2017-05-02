@@ -2,7 +2,7 @@
 
 using namespace std;
 
-#define FH_MAX_RANK 40
+#define FH_MAX_RANK 18
 #define s second
 #define f first
 #define mp make_pair
@@ -15,9 +15,9 @@ typedef vector<pii> vpii;
 typedef vector<int> vi;
 typedef vector<bool> vb;
 
-int N, SKY = -1;
+int SKY = -1;
 vector<vpii> G;
-vi taken;
+vb taken;
 vb visited;
 template <class T>
 
@@ -240,8 +240,6 @@ public:
   }
 };
 
-FibHeap<pair<int, pii> > pq;
-
 void dfs(int v) {
   visited[v] = true;
   for (vector<pair<int, int> >::iterator it = G[v].begin(); it != G[v].end(); it++)
@@ -261,8 +259,8 @@ bool connected(int N, int E) {
 }
 
 
-void process(int vtx, vector<Node<pair<int, pii> >*> &pos) {
-  taken[vtx] = 1;
+void process(int vtx, vector<Node<pair<int, pii> >*> &pos, FibHeap<pair<int, pii> > &pq) {
+  taken[vtx] = true;
   for (int j = 0; j < (int)G[vtx].size(); j++) {
     pii v = G[vtx][j];
     if (!taken[v.second]) {
@@ -277,9 +275,10 @@ void process(int vtx, vector<Node<pair<int, pii> >*> &pos) {
 
 pair<int, pii > prim(int N) {
   vector<Node<pair<int, pii> >*> pos = vector<Node<pair<int, pii> >*>(N, NULL);
-  taken.assign(N, 0);
+  FibHeap<pair<int, pii> > pq;
+  taken.assign(N, false);
   pii nAnE(0, 0);
-  process(0, pos);
+  process(0, pos, pq);
   int w, p, u;
   int cost = 0;
   while (!pq.empty()) {
@@ -291,14 +290,14 @@ pair<int, pii > prim(int N) {
         nAnE.f += 1;
       else
         nAnE.s += 1;
-      cost += w, process(u, pos);
+      cost += w, process(u, pos, pq);
     }
   }
   return mp(cost, nAnE);
 }
 
 int main() {
-  int A, E;
+  int A, E, N;
   bool flagA = false;
   pair<int, pii > yesA(INF, mp(0, 0));
   pair<int, pii > noA(INF, mp(0, 0));
@@ -344,11 +343,12 @@ int main() {
         printf("%d\n%d %d\n", yesA.f, yesA.s.f, yesA.s.s);
         return 0;
       }
+    } else {
+      noA = prim(N);
     }
-    noA = prim(N);
   }
 
-  if (A == 0 && E == 0)
+  if ((A == 0 && E == 0) || (yesA.f == INF && noA.f == INF))
     printf("Insuficiente\n");
   else if (yesA.f >= noA.f)
     printf("%d\n%d %d\n", noA.f, noA.s.f, noA.s.s);

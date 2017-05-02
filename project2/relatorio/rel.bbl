@@ -1,0 +1,14 @@
+\begin{thebibliography}{1}
+
+\bibitem{ISOC++:2003}
+Programming languages - c++.
+\newblock {\em ISO/IEC 14882:2003}, page 879, 2003.
+
+\bibitem{prim}
+T. H. Cormen, C. E. Leiserson, R. L. Rivest, e C. Stein. Introduction to Algorithms (3rd Edition).
+\newblock {\em Prim's algorithm - 23.2}, pages 634-636. MIT Press, 2009.
+
+\bibitem{tarjan}
+Michael L. Fredman, R. Tarjan. Fibonacci Heaps and Their Uses in Improved Network Optimization Algorithms. ACM, 1987.
+
+\end{thebibliography}
